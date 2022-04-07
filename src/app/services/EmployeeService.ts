@@ -17,7 +17,7 @@ export class EmployeeService {
     }
 
     public async getEmployeeById(employeeId: string) {
-        return this.employeeRepository.getEmployeeById(employeeId);
+        return await this.employeeRepository.getEmployeeById(employeeId);
     }
     
     public async createEmployee(employeeDetails: any) {
@@ -28,8 +28,9 @@ export class EmployeeService {
                 age: employeeDetails.age,
                 password: employeeDetails.password ? await bcrypt.hash(employeeDetails.password, 10): ' ',
                 departmentId: employeeDetails.departmentId,
-                role: employeeDetails.roleId,
+                roleId: employeeDetails.roleId,
                 isActive: true,
+                addressId:employeeDetails.addressId,
             });
             const save = await this.employeeRepository.saveEmployeeDetails(newEmployee);
             delete save.password

@@ -3,10 +3,12 @@
  */
 import { Repository } from "typeorm";
 import { Employee } from "../entities/Employee";
+import { AddressRepository } from "../repository/AddressRepository";
 import { DepartmentRepository } from "../repository/DepartmentRepository";
 import { EmployeeRepository } from "../repository/EmployeeRepository";
 import { ProjectRepository } from "../repository/ProjectRepoistory";
 import { RoleRepository } from "../repository/RoleRepository";
+import { AddressService } from "../services/AddressService";
 import { DepartmentService } from "../services/DepartmentService";
 import { EmployeeService } from "../services/EmployeeService";
 import { ProjectService } from "../services/ProjectService";
@@ -20,6 +22,8 @@ import RoleController from "./RoleController";
 // const employee = new Employee();
 const employeeRepository = new EmployeeRepository();
 const employeeService = new EmployeeService(employeeRepository);
+const addressRepository = new AddressRepository();
+const addressService = new AddressService(addressRepository);
 
 const departmentRepository = new DepartmentRepository();
 const departmentService = new DepartmentService(departmentRepository);
@@ -30,7 +34,7 @@ const roleService = new RoleService(roleRepository);
 
 export default [
   new HealthController(),
-  new EmployeeController(employeeService),
+  new EmployeeController(employeeService,addressService),
   new DepartmentController(departmentService),
   new ProjectController(projectService),
   new RoleController(roleService)

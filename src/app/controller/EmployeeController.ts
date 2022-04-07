@@ -5,6 +5,7 @@ import APP_CONSTANTS from "../constants";
 import { CreateEmployeeDto } from "../dto/CreateEmployee";
 import authorize from "../middleware/authorize";
 import validationMiddleware from "../middleware/validationMiddleware";
+import { AddressService } from "../services/AddressService";
 import { EmployeeService } from "../services/EmployeeService";
 import { AbstractController } from "../util/rest/controller";
 import RequestWithUser from "../util/rest/request";
@@ -17,6 +18,7 @@ class EmployeeController extends AbstractController {
   private upload = multer({ dest: "./public/uploads/"});
   constructor(
     private employeeService: EmployeeService,
+    private addressService: AddressService,
   ) {
     super(`${APP_CONSTANTS.apiPrefix}/employees`);
     this.initializeRoutes();
@@ -42,7 +44,7 @@ class EmployeeController extends AbstractController {
     );
     this.router.put(
       `${this.path}/:employeeId`,
-      authorize("engineer"),
+      authorize("admin"),
       this.asyncRouteHandler(this.updateEmployee)
     );
     this.router.delete(
@@ -77,9 +79,15 @@ class EmployeeController extends AbstractController {
     response: Response,
     next: NextFunction
   ) => {
-    const data = await this.employeeService.getEmployeeById(request.params.id);
+    console.log(request.params.employeeId)
+    const data = await this.employeeService.getEmployeeById(request.params.employeeId);
+    const saveadd = await this.addressService.getAddressById(data.addressId);
+    let employee = {
+      data:data,
+      savedate:saveadd
+    };
     response.send(
-      this.fmt.formatResponse(data, Date.now() - request.startTime, "OK")
+      this.fmt.formatResponse(employee, Date.now() - request.startTime, "OK")
     );
   }
 
@@ -89,6 +97,8 @@ class EmployeeController extends AbstractController {
     next: NextFunction
   ) => {
     try {
+      const add = await this.addressService.createAddress(request.body);
+      request.body["addressId"] = add.id;
       const data = await this.employeeService.createEmployee(request.body);
       response.send(
         this.fmt.formatResponse(data, Date.now() - request.startTime, "OK")
