@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AbstractEntity } from "./AbstractEntity";
 import { Department } from "./Department";
+import { Role } from "./Roles";
 
 @Entity("employee")
 export class Employee extends AbstractEntity {
@@ -25,6 +26,10 @@ export class Employee extends AbstractEntity {
     @ManyToOne((type) => Department, { cascade: true })
     @JoinColumn()
     public department: Department;
+
+    @ManyToOne((type) => Role, { cascade: true })
+    @JoinColumn()
+    public role: Role;
 
     @Column()
     public departmentId: string;

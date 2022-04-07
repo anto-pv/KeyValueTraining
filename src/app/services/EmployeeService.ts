@@ -28,6 +28,7 @@ export class EmployeeService {
                 age: employeeDetails.age,
                 password: employeeDetails.password ? await bcrypt.hash(employeeDetails.password, 10): ' ',
                 departmentId: employeeDetails.departmentId,
+                role: employeeDetails.roleId,
                 isActive: true,
             });
             const save = await this.employeeRepository.saveEmployeeDetails(newEmployee);
