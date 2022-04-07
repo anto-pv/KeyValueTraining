@@ -81,7 +81,7 @@ export class EmployeeService {
           let payload = {
             "custom:id": employeeDetails.id,
             "custom:email": employeeDetails.username,
-            "custom: role":"guest"
+            "customrole":"admin"
           };
           const token = this.generateAuthTokens(payload);
           return {

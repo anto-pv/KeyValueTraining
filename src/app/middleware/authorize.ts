@@ -4,7 +4,7 @@ import jsonwebtoken from "jsonwebtoken";
 import APP_CONSTANTS from "../constants";
 import UserNotAuthorizedException from "../exception/UserNotAuthorizedExpception";
 
-const authorize = () => {
+const authorize = (user: string) => {
  return async (
    req: RequestWithUser,
    res: express.Response,
@@ -13,8 +13,14 @@ const authorize = () => {
    try {
      const token = getTokenFromRequestHeader(req);
      jsonwebtoken.verify(token, process.env.JWT_TOKEN_SECRET);
-     console.log(jsonwebtoken.decode(token))
-     return next();
+     const jwtk=jsonwebtoken.decode(token)
+     const payloadstringify=JSON.stringify(jwtk);
+     const payload=JSON.parse(payloadstringify)
+     //console.log(payload.customrole)
+     if(payload.customrole === user)
+      return next();
+    else
+      return next(new UserNotAuthorizedException());
    } catch (error) {
      return next(new UserNotAuthorizedException());
    }
