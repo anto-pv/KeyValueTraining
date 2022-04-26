@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "Creating test .env file ..."
 tee -a .env << END
-PORT=3000
+PORT=3002
 POSTGRES_USER=postgres
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432

@@ -32,12 +32,12 @@ class EmployeeController extends AbstractController {
     );
     this.router.get(
       `${this.path}/:employeeId`,
-      authorize("engineer"),
+      // authorize("engineer"),
       this.asyncRouteHandler(this.getEmployeeById)
     );
     this.router.post(
       `${this.path}`,
-      authorize("admin"),
+      //authorize("admin"),
       // validationMiddleware(CreateEmployeeDto, APP_CONSTANTS.body),
       // this.asyncRouteHandler(this.createEmployee)
       this.createEmployee
